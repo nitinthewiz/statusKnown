@@ -6,9 +6,10 @@
 
 		$post = curl_init();
 		curl_setopt($post, CURLOPT_URL, $url);
-		// curl_setopt($post, CURLOPT_CUSTOMREQUEST, "POST"); 
 		curl_setopt($post, CURLOPT_POST, true);
 		curl_setopt($post, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($post, CURLOPT_COOKIEJAR, "known_cookies.txt");  //initiates cookie file if needed 
+    		curl_setopt($post, CURLOPT_COOKIEFILE, "known_cookies.txt");  // Uses cookies from previous session if exist 
 		curl_setopt($post, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($post, CURLOPT_FOLLOWLOCATION, true);
 		curl_setopt($post, CURLOPT_HTTPHEADER, array(
@@ -17,13 +18,15 @@
 			'X-KNOWN-SIGNATURE: '.$sig
 		));
 		$result = curl_exec($post);
-		$returningdata = curl_getinfo($post);
+		// $returningdata = curl_getinfo($post);
 		curl_close($post);
-		return $returningdata;
+		// return $returningdata;
+		return $result;
 	}
 
 	// Make sure you specify the username, api_key and status message here -
 	$result = statusKnown('username','api_key','status post');
-	echo json_encode($result, JSON_PRETTY_PRINT);
+	$obj_a = json_decode($result, true);
+	print_r ($obj_a);
 	echo "\n";
 ?>
